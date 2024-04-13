@@ -2,7 +2,8 @@ html,
 body {
   margin: 0;
   height: 100%;
-  background-color: black;
+  /* background-color: black; */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 div#canvas {
@@ -13,11 +14,53 @@ div#canvas {
 
 div.info-planet{
   position: absolute;
-
-  background-color: red;
+  background-color: #536872;
   width: 300px;
   height: 300px;
   overflow: auto;
 
 }
 
+.chatbox {
+  border: solid;
+  border-radius: 10px;
+  width: 90%;
+  height: 90%;
+  justify-content: center;
+  margin: auto;
+  overflow: auto;
+}
+
+ /* Chat containers */
+ .container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  margin: 10px 0;
+  float: left;
+  width: 70%;
+}
+
+/* Darker chat container */
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+  float: right;
+}
+
+/* Clear floats */
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.chatbot messages{
+  height: 85%
+}
+
+.chatbot user_input{
+  height: 15%;
+  position: absolute;
+  bottom: 0px;
+}

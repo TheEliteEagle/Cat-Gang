@@ -5,9 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HTML 5 Boilerplate</title>
+    <link rel="stylesheet" href="/static/main.css">
     <script type="text/javascript">
+
+        function addUserMessage(msg) {
+            let div = document.createElement("div");
+            div.classList.add("container"); 
+            div.classList.add("darker"); 
+            let p = document.createTextNode(msg);
+            div.appendChild(p);
+            document.getElementById("messageBox").appendChild(div);
+        }
+
+        function addBotMessage(msg) {
+            let div = document.createElement("div");
+            div.classList.add("container"); 
+            let p = document.createTextNode(msg);
+            div.appendChild(p);
+            document.getElementById("messageBox").appendChild(div);
+        }
+
         function handleSubmit()
         {
+            
+            addUserMessage(document.getElementById("user_input").value);
+            
             var payload = {
                 user_input: document.getElementById("user_input").value
             };
@@ -26,18 +48,45 @@
                 return res.json()
             })
             .then(function(json){
-                console.log(json.response);
-                let textNode = document.createTextNode(json.response);
-                document.body.appendChild(textNode);
+                addBotMessage(json.response);
+
             })
         }
       </script>
   </head>
   <body>
-    <form action="javascript:handleSubmit()">
+    <!-- <form action="javascript:handleSubmit()">
         <label for="fname">Enter message:</label><br>
         <input type="text" id="user_input" name="user_input"><br>
         <input type="submit" value="Submit">
-    </form>
+    </form> -->
+
+    <div id="info-earth" class="info-planet">
+        <div class="chatbox">
+            <div class="messages" id="messageBox">
+                <!-- <div class="container">
+                    <p>Hello. How are you today?</p>
+                  </div>
+                  
+                  <div class="container darker">
+                    <p>Hey! I'm fine. Thanks for asking!</p>
+                  </div>
+                  
+                  <div class="container">
+                    <p>Sweet! So, what do you wanna do today?</p>
+                  </div>
+                  
+                  <div class="container darker">
+                    <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
+                  </div>  -->
+            </div>
+
+            <div class="user_input">
+                <form action="javascript:handleSubmit()">
+                    <input type="text" id="user_input" name="user_input"><br>
+                </form>
+            </div>
+        </div>
+    </div>
   </body>
 </html>
