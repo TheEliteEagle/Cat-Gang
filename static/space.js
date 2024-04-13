@@ -38,6 +38,7 @@ window.onload = function() {
     const y = event.offsetY - transform.f;
 
     // find which object was clicked
+    let any = false;
     objects.forEach(obj => {
       // if the x,y is in this object;
       if (obj.x <= x &&
@@ -45,11 +46,15 @@ window.onload = function() {
         x <= obj.x + obj.width &&
         y <= obj.y + obj.height) {
         onClick(obj, ctx);
+        any = true;
         // dont worry about multiple objects being clicked at the same time
         // because they should be far enough apart
       }
     });
 
+    if (any){
+      drawObjects(ctx, objects);
+    }
   })
 
   canvas.addEventListener("wheel", (event) => {
@@ -61,18 +66,7 @@ window.onload = function() {
 
     // clear the canvas to re-draw
 
-    // Store the current transformation matrix
-    ctx.save();
-
-    // Use the identity matrix while clearing the canvas
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // ctx.fillStyle = "black"; // space is black
-    // ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // Restore the transform
-    ctx.restore();
-
+    clear(ctx);
 
     ctx.translate(dx, dy);
     drawObjects(ctx, objects);
@@ -139,6 +133,22 @@ function makeObject(name, src, x, HEIGHT, scale = 1) {
   return obj;
 }
 
+
+function clear(ctx){
+
+    // Store the current transformation matrix
+    ctx.save();
+
+    // Use the identity matrix while clearing the canvas
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    // ctx.fillStyle = "black"; // space is black
+    // ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Restore the transform
+    ctx.restore();
+}
+
 function drawObjects(ctx, objects) {
   objects.forEach(obj => {
     // console.log(obj.img)
@@ -159,22 +169,44 @@ function onClick(object, ctx) {
 
   let ratio = Math.max(ratioX, ratioY);
 
-  let tx = object.x;
-  let ty = object.y;
+  // let tx = object.x;
 
+
+  // translate by -current - center
+
+
+    
+
+  // let ty = object.y;
 
   // how do we do this smoothly??
   // identity martix
   let currentTransform = ctx.getTransform();
+  let cx = object.width/2; 
+  let cy = object.height/2;
+
+  let tx  = cx + (ctx.canvas.width - obj.width*ratio)/2;
+  let ty  = cy + (ctx.canvas.height - obj.height*ratio)/2;
+
+
 
   // new matrix for transform of tx,ty then scale of s is:
   // s 0 tx
   // 0 s ty
   // 0 0 1
-  let newTransform = new DOMMatrix([ratio, 0, tx, 0, ratio, ty]);
-  ctx.setTransform(ratio, 0, tx, 0, ratio, ty, 0, 0);
+  let M1 = new DOMMatrix([ratio, 0, 0, ratio, cx, -cy]); // translate and scale about origin
+  let M2 = new DOMMatrix([1, 0, 0, 1, tx, ty]); // move to right place
+  
+  let newTransform = M1 * M2;
+  console.log(M1);
+  console.log(M2);
 
-  console.log(currentTransform, newTransform);
+  // let newTransform = new DOMMatrix([ratio, 0, 0, ratio, tx, ty]);
+
+
+  // ctx.setTransform(newTransform); 
+
+  console.log(currentTransform, newTransform, ctx.getTransform());
 
 
 
