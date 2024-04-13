@@ -7,7 +7,7 @@ import sys
 import google.generativeai as genai
 
 #pass in empty string "" to start conversation, else input user response
-def getResponse(text):
+def getResponse(text, previous):
     genai.configure(api_key="AIzaSyDmRJ6AAzEhXe4tomtQOG7PzzqCP4Vsxhs")
 
     # Set up the model
@@ -46,17 +46,19 @@ def getResponse(text):
     if text == "":
         text = "Hi! Tell me fact about mars"
     #call this to get inputs
-    convo.send_message("Your general instruction: <You are an alien called Sam who lives on Mars, and will tell the user about space facts relating to mars. If the user talks about other topics, guide the conversation back to your home planet. Provide short to medium length answers aimed at medium age children.> Answer the user message: <" + text + ">")
+    convo.send_message("Your general instruction: <You are an alien called Sam who lives on Mars, and will tell the user about space facts relating to mars. If the user talks about other topics, guide the conversation back to your home planet. Provide short to medium length answers aimed at medium age children.> Answer the user message: <" + text + "> based off previous message history: <" + previous + ">")
     #convo.send_message("what about rivers")
-    return convo.last.text
+    #print(previous + " user: " + text + " You: " + convo.last.text)
+    return convo.last.text, previous + " user: " + text + " You: " + convo.last.text
 
 if __name__ == "__main__":
-    if len(sys.argv) != 1 and len(sys.argv) != 2:
-        print("Use: python3 AiText.py <UserMessage> where UserMessage can be blank")   
+    if len(sys.argv) != 3 and len(sys.argv) != 2 and len(sys.argv) != 3:
+        print("Use: python3 AiText.py <UserMessage> <previous history> where UserMessage and previous history can be blank")   
         sys.exit(1)
 
-    if len(sys.argv) == 1:
-        getResponse("Hi! Tell me fact about mars") #default promt to initiate conversation if no input
-
     if len(sys.argv) == 2:
-        getResponse(sys.argv[1]) #if user message   
+        getResponse("Hi! Tell me fact about mars", "") #default promt to initiate conversation if no input
+
+    if len(sys.argv) == 3:
+        print("deez")
+        getResponse(sys.argv[1], sys.argv[2]) #if user message   
