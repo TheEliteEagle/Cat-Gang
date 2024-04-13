@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HTML 5 Boilerplate</title>
+    <script type="text/javascript">
+        function handleSubmit()
+        {
+            var payload = {
+                user_input: document.getElementById("user_input").value
+            };
+
+            var data = JSON.stringify( payload );
+
+            fetch("/chatbot/mars",
+                {
+                    method: "POST",
+                    body: data,
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+            .then(function(res){ 
+                return res.json()
+            })
+            .then(function(json){
+                console.log(json.response);
+                let textNode = document.createTextNode(json.response);
+                document.body.appendChild(textNode);
+            })
+        }
+      </script>
+  </head>
+  <body>
+    <form action="javascript:handleSubmit()">
+        <label for="fname">Enter message:</label><br>
+        <input type="text" id="user_input" name="user_input"><br>
+        <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
