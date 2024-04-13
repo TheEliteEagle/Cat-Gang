@@ -23,10 +23,10 @@ window.onload = function() {
 
 
   let objects = [];
-  objects.push(makeObject("Earth", "static/earth.jpg", 0, 1));
-  objects.push(makeObject("Moon", "static/moon.jpg", 2000, 0.5));
-  objects.push(makeObject("Mars", "static/moon.jpg", 4000, 1));
-  objects.push(makeObject("Jupiter", "static/moon.jpg", 6000, 3));
+  objects.push(makeObject("Earth", "static/earth.jpg", 0, 1, 0, 0));
+  objects.push(makeObject("Moon", "static/moon.jpg", 2000, 0.5, 0, 0));
+  objects.push(makeObject("Mars", "static/moon.jpg", 4000, 1, 0, 0));
+  objects.push(makeObject("Jupiter", "static/moon.jpg", 6000, 3, 0, 0));
 
   console.log(ctx, objects);
 
@@ -73,7 +73,7 @@ window.onload = function() {
     //
     totalScroll -= dx; // rightward scroll is negative
 
-
+    console.log(totalScroll)
 
     objects.forEach(obj => {
       let left = parseInt(obj.div.style.left);
@@ -81,8 +81,10 @@ window.onload = function() {
       left += dx;
       obj.div.style.left = left + "px";
 
+      let divLeftBound = obj.x - ctx.canvas.width / 4 - ctx.canvas.width / 2;
+      let divRightBound = obj.x + ctx.canvas.width / 4 - ctx.canvas.width / 2
 
-      if (left < -obj.div.offsetWidth || left > ctx.canvas.width) {
+      if (totalScroll < divLeftBound || totalScroll > divRightBound) {
         // outside the screen
         obj.div.style.display = "none";
       } else {
@@ -90,7 +92,7 @@ window.onload = function() {
 
         obj.div.style.display = "block";
 
-        let t = (left + obj.div.offsetWidth / 2) / ctx.canvas.width;
+        let t = (totalScroll - divLeftBound) / (divRightBound - divLeftBound);
         // quadratic with intercepts at 0 and 1 peak at 0.5,1
         obj.div.style.opacity = -4 * t * (t - 1);
 
@@ -145,6 +147,7 @@ function getCurrentZoom() {
       t = Math.max(0, t);
 
       return start + (end - start) * t;
+      // return 1;  
 
     }
   }
@@ -156,7 +159,7 @@ function getCurrentZoom() {
 
 }
 
-function makeObject(name, src, x, scale = 1) {
+function makeObject(name, src, x, scale = 1, divRelTop, divRelLeft) {
   let obj = {}
 
   let image = new Image();
@@ -206,8 +209,8 @@ function makeObject(name, src, x, scale = 1) {
       let div = document.createElement("div");
       div.className = "info-planet";
       div.id = "info-" + name;
-      div.style.left = (obj.x + img.width) + "px";
-      div.style.top = "100px";
+      div.style.left = (obj.x + divRelLeft) + "px";
+      div.style.top = divRelTop+"px";
       document.body.appendChild(div);
       obj.div = div;
     }
