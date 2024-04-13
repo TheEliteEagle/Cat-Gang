@@ -1,17 +1,17 @@
 
 
 var totalScroll = 0;
-var zoomThresholds = [[0, 1], [1300, 1], [1500, 3], [1700, 1],
-[3300, 1], [3500, 2], [3700, 1],
-[5300, 1], [5500, 0.5], [5700, 1]];
+// var zoomThresholds = [[0, 1], [1300, 1], [1500, 3], [1700, 1],
+// [3300, 1], [3500, 2], [3700, 1],
+// [5300, 1], [5500, 0.5], [5700, 1]];
+
+var planets = [];
 
 const MAX_SCROLL = 7000;
 
 window.onload = function() {
 
-
   let scrollSize = 0.5;
-
 
   var parent = document.getElementById("canvas");
 
@@ -22,17 +22,16 @@ window.onload = function() {
   var ctx = canvas.getContext('2d');
 
 
-  let objects = [];
-  objects.push(makeObject("Earth", "static/earth.jpg", 0, 1, 0, 0));
-  objects.push(makeObject("Moon", "static/moon.jpg", 2000, 0.5, 0, 0));
-  objects.push(makeObject("Mars", "static/moon.jpg", 4000, 1, 0, 0));
-  objects.push(makeObject("Jupiter", "static/moon.jpg", 6000, 3, 0, 0));
+  // make sure these are in order
+  makeObject("earth", "static/earth.jpg", 0, 1.2, 1, 0, 0);
+  makeObject("moon", "static/moon.jpg", 2000, 3, 0.5, 0, 0);
+  makeObject("mars", "static/moon.jpg", 4000, 1.5, 1, 0, 0);
+  makeObject("jupiter", "static/moon.jpg", 6000, 0.5, 3, 0, 0);
 
-  console.log(ctx, objects);
 
   setTimeout(() => {
-    drawObjects(ctx, objects);
-  }, 1000)
+    drawPlanets(ctx);
+  }, 100);
 
 
   canvas.addEventListener("click", event => {
@@ -42,12 +41,11 @@ window.onload = function() {
     const x = event.offsetX - transform.e;
     const y = event.offsetY - transform.f - ctx.canvas.height / 2;
 
-    console.log(x, y)
     let zoom = getCurrentZoom();
 
     // find which object was clicked
     let any = false;
-    objects.forEach(obj => {
+    planets.forEach(obj => {
       // if the x,y is in this object;
       if (obj.x - obj.width * zoom / 2 <= x &&
         obj.y - obj.height * zoom / 2 <= y &&
@@ -59,63 +57,21 @@ window.onload = function() {
         // because they should be far enough apart
       }
     });
-
-    if (any) {
-      drawObjects(ctx, objects);
-    }
   })
 
   document.addEventListener("wheel", (event) => {
     event.preventDefault();
 
     let dx = -event.wheelDeltaY * scrollSize;
-    // let dy = event.wheelDeltaY * scrollSize;
-    //
+
     totalScroll -= dx; // rightward scroll is negative
-
-    console.log(totalScroll)
-
-    objects.forEach(obj => {
-      let left = parseInt(obj.div.style.left);
-
-      left += dx;
-      obj.div.style.left = left + "px";
-
-      let divLeftBound = obj.x - ctx.canvas.width / 4 - ctx.canvas.width / 2;
-      let divRightBound = obj.x + ctx.canvas.width / 4 - ctx.canvas.width / 2
-
-      if (totalScroll < divLeftBound || totalScroll > divRightBound) {
-        // outside the screen
-        obj.div.style.display = "none";
-      } else {
-        //fade in out
-
-        obj.div.style.display = "block";
-
-        let t = (totalScroll - divLeftBound) / (divRightBound - divLeftBound);
-        // quadratic with intercepts at 0 and 1 peak at 0.5,1
-        obj.div.style.opacity = -4 * t * (t - 1);
-
-
-      }
-
-
-    })
-
-
 
 
     // clear the canvas to re-draw
-
     clear(ctx);
 
-
     ctx.translate(dx, 0);
-
-
-
-
-    drawObjects(ctx, objects);
+    drawPlanets(ctx, dx);
   });
 
 
@@ -126,52 +82,77 @@ window.onload = function() {
     ctx.canvas.height = window.innerHeight;
     ctx.restore();
     clear(ctx);
-    drawObjects(ctx, objects);
+    drawPlanets(ctx);
   };
 
-
 }
 
-function getCurrentZoom() {
+function getCurrentZooms(ctx) {
 
+  let zooms = [];
+  let ts = [];
 
-  for (let i = 1; i < zoomThresholds.length; i++) {
-    if (totalScroll < zoomThresholds[i][0]) {
+  let boundSize = ctx.canvas.width / 3;
+  let middle = ctx.canvas.width / 2;
+  let leftBound = middle - boundSize;
+  let rightBound = middle + boundSize;
 
-      let start = zoomThresholds[i - 1][1];
-      let end = zoomThresholds[i][1];
+  for (let i = 0; i < planets.length; i++) {
 
-      let t = (totalScroll - zoomThresholds[i - 1][0]) / (zoomThresholds[i][0] - zoomThresholds[i - 1][0]);
+    let x = planets[i].x - totalScroll;
 
-      t = Math.min(1, t);
-      t = Math.max(0, t);
+    if (leftBound < x && x < rightBound) {
+      // do interpolation
 
-      return start + (end - start) * t;
-      // return 1;  
+      let start, end, t;
+      if (x < middle) {
+        start = 1;
+        end = planets[i].zoom;
 
+        t = 1 - (middle - x) / boundSize;
+        ts.push(1 - t);
+
+      } else {
+        start = planets[i].zoom;
+        end = 1;
+
+        t = (x - middle) / boundSize;
+        ts.push(t);
+      }
+
+      let z = start + (end - start) * t
+      zooms.push(z);
+
+    } else {
+      zooms.push(1);
+      ts.push(null);
     }
   }
-
-  // bigger than all thresholds
-  // shoudl we limit the scroll??
-  return zoomThresholds[zoomThresholds.length - 1][1];
-
-
+  return [zooms, ts];
 }
 
-function makeObject(name, src, x, scale = 1, divRelTop, divRelLeft) {
-  let obj = {}
+function makeObject(name, src, x, zoom = 1, scale = 1, divRelTop, divRelLeft) {
+  let obj = {
+    name: name,
+    x: x,
+    zoom: zoom, // the extra zoom to add when focused
+    // scale is the scaling of image file to unfocused size
+  }
 
+
+  let div = document.createElement("div");
+  div.className = "info-planet";
+  div.id = "info-" + name;
+  div.style.left = (obj.x + divRelLeft) + "px";
+  div.style.top = divRelTop + "px";
+  document.body.appendChild(div);
+  obj.div = div;
+
+
+  // add the image
   let image = new Image();
   image.src = src;
-
-
-  obj.name = name;
-  obj.x = x;
-
-
-  // we dont need this if the actual images have transparency just do: 
-  // obj.img = image;
+  // if the image transparency is good we dont need this;
   image.onload = function() {
     obj.width = image.width * scale;
     obj.height = image.height * scale;
@@ -202,28 +183,12 @@ function makeObject(name, src, x, scale = 1, divRelTop, divRelLeft) {
     let img = new Image();
     img.src = tempCanvas.toDataURL();
     obj.img = img;
-
-
-    img.onload = function() {
-      // create the div for the info
-      let div = document.createElement("div");
-      div.className = "info-planet";
-      div.id = "info-" + name;
-      div.style.left = (obj.x + divRelLeft) + "px";
-      div.style.top = divRelTop+"px";
-      document.body.appendChild(div);
-      obj.div = div;
-    }
-
-
   }
-
-  return obj;
+  planets.push(obj);
 }
 
 
 function clear(ctx) {
-
   // Store the current transformation matrix
   ctx.save();
 
@@ -237,27 +202,40 @@ function clear(ctx) {
   ctx.restore();
 }
 
-function drawObjects(ctx, objects) {
+function drawPlanets(ctx, dx = 0) {
+  let [zooms, ts] = getCurrentZooms(ctx);
 
-  let zoom = getCurrentZoom();
-
-
-
-  objects.forEach(obj => {
+  for (let i = 0; i < planets.length; i += 1) {
     // console.log(obj.img)
+    let obj = planets[i];
+    let zoom = zooms[i];
     let x = obj.x - obj.width * zoom / 2;
     let y = obj.y - obj.height * zoom / 2 + ctx.canvas.height / 2;
     ctx.drawImage(obj.img, x, y, obj.width * zoom, obj.height * zoom); //obj.img.width, obj.img.height);
-  })
 
+    // update divs
+    let left = parseInt(obj.div.style.left);
+    left += dx;
+    obj.div.style.left = left + "px";
+
+
+    if (ts[i] == null) {
+      // outside the screen
+      obj.div.style.display = "none";
+    } else {
+      //fade in out
+
+      obj.div.style.display = "block";
+      let t = ts[i];
+      // quadratic with intercepts at 0 and 1 peak at 0.5,1
+      obj.div.style.opacity = 1 - t;
+    }
+
+  }
 }
 
 // called when a planet is clicked
 function onClick(object, ctx) {
-
-
-
   console.log(object);
 }
-
 
