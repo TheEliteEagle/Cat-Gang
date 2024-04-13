@@ -3,18 +3,9 @@ window.onload = function() {
 
   console.log("hello");
 
-  // let img = new Image();
-  // img.onload = function() {
-  //   ctx.drawImage(img, 10, 10);
-  // };
-  // img.src = 'earth.jpg';
 
   let scrollSize = 0.2;
 
-
-  let objects = [];
-  objects.push(makeObject("Earth", "static/earth.jpg", 0, 0, 0.25));
-  objects.push(makeObject("Moon", "moon.jpg", 200, 50, 0.1));
 
 
   var parent = document.getElementById("canvas");
@@ -26,13 +17,15 @@ window.onload = function() {
   var ctx = canvas.getContext('2d');
 
 
+  let objects = [];
+  objects.push(makeObject("Earth", "static/earth.jpg", 0, canvas.height, 0.5));
+  objects.push(makeObject("Moon", "static/moon.jpg", 500, canvas.height, 0.5));
 
   console.log(ctx, objects);
 
-  setTimeout(()=>{
-
-  drawObjects(ctx, objects);
-  }, 100)
+  setTimeout(() => {
+    drawObjects(ctx, objects);
+  }, 1000)
 
 
   canvas.addEventListener("click", event => {
@@ -45,27 +38,25 @@ window.onload = function() {
     const y = event.offsetY - transform.f;
 
     // find which object was clicked
-    let target = null;
     objects.forEach(obj => {
-
       // if the x,y is in this object;
-
       if (obj.x <= x &&
         obj.y <= y &&
         x <= obj.x + obj.width &&
         y <= obj.y + obj.height) {
-        target = obj;
+        onClick(obj, ctx);
+        // dont worry about multiple objects being clicked at the same time
+        // because they should be far enough apart
       }
     });
-    console.log(target);
+
   })
 
-  document.addEventListener("wheel", (event) => {
+  canvas.addEventListener("wheel", (event) => {
+    event.preventDefault();
 
     let dx = event.wheelDeltaX * scrollSize;
     let dy = event.wheelDeltaY * scrollSize;
-
-
 
 
     // clear the canvas to re-draw
@@ -77,8 +68,8 @@ window.onload = function() {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "blue";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // ctx.fillStyle = "black"; // space is black
+    // ctx.fillRect(0, 0, canvas.width, canvas.height);
     // Restore the transform
     ctx.restore();
 
@@ -91,35 +82,101 @@ window.onload = function() {
 }
 
 
-function makeObject(name, src, x, y, scale = 1) {
+function makeObject(name, src, x, HEIGHT, scale = 1) {
   let obj = {}
 
-  let img = new Image();
-  img.src = src;
-  obj.img = img;
+  let image = new Image();
+  image.src = src;
 
 
   obj.name = name;
   obj.x = x;
-  obj.y = y;
+
+
+  // centralise in the y direction
+
 
 
   // have object size (used for clicking) seperate from image size
   // so we can scale the image
-  img.onload = function() {
-    obj.width = img.width * scale;
-    obj.height = img.height * scale;
-  }
 
+
+
+  // we dont need this if the actual images have transparency just do: 
+  // obj.img = image;
+  image.onload = function() {
+    obj.width = image.width * scale;
+    obj.height = image.height * scale;
+    obj.y = (HEIGHT- obj.height) / 2;
+
+    // make all (almost) white pixels transparent
+    const THRESHOLD = 240;
+
+    var tempCanvas = document.createElement("canvas");
+    tempCanvas.width = image.width;
+    tempCanvas.height = image.height;
+    var tempCtx = tempCanvas.getContext("2d");
+    tempCtx.drawImage(image, 0, 0);
+
+    var imgData = tempCtx.getImageData(0, 0, image.width, image.height);
+    var pixels = imgData.data;
+
+    for (var i = 3; i < pixels.length; i += 4) {
+      if (pixels[i - 3] >= THRESHOLD &&
+        pixels[i - 2] >= THRESHOLD &&
+        pixels[i - 1] >= THRESHOLD) {
+        pixels[i] = 0;
+      }
+    }
+    imgData.data = pixels;
+    tempCtx.putImageData(imgData, 0, 0);
+
+    let img = new Image();
+    img.src = tempCanvas.toDataURL();
+    obj.img = img;
+  }
 
   return obj;
 }
 
 function drawObjects(ctx, objects) {
   objects.forEach(obj => {
+    // console.log(obj.img)
     ctx.drawImage(obj.img, obj.x, obj.y, obj.width, obj.height); //obj.img.width, obj.img.height);
   })
 
 }
 
+// called when a planet is clicked
+function onClick(object, ctx) {
+
+
+
+  // set scale so that the object fills the screen
+  //
+  let ratioX = ctx.canvas.width / object.width;
+  let ratioY = ctx.canvas.height / object.height;
+
+  let ratio = Math.max(ratioX, ratioY);
+
+  let tx = object.x;
+  let ty = object.y;
+
+
+  // how do we do this smoothly??
+  // identity martix
+  let currentTransform = ctx.getTransform();
+
+  // new matrix for transform of tx,ty then scale of s is:
+  // s 0 tx
+  // 0 s ty
+  // 0 0 1
+  let newTransform = new DOMMatrix([ratio, 0, tx, 0, ratio, ty]);
+  ctx.setTransform(ratio, 0, tx, 0, ratio, ty, 0, 0);
+
+  console.log(currentTransform, newTransform);
+
+
+
+}
 
