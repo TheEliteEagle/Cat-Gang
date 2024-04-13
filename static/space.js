@@ -13,7 +13,7 @@ window.onload = function() {
 
 
   let objects = [];
-  objects.push(makeObject("Earth", "earth.jpg", 0, 0, 0.25));
+  objects.push(makeObject("Earth", "static/earth.jpg", 0, 0, 0.25));
   objects.push(makeObject("Moon", "moon.jpg", 200, 50, 0.1));
 
 
