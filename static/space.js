@@ -17,7 +17,7 @@ window.onload = function() {
 
   var canvas = document.createElement('canvas');
   canvas.width = parent.offsetWidth;
-  canvas.height = parent.offsetHeight;;
+  canvas.height = parent.offsetHeight;; //Max: why 2?
   parent.appendChild(canvas);
   var ctx = canvas.getContext('2d');
 
@@ -195,6 +195,9 @@ function clear(ctx) {
   // Use the identity matrix while clearing the canvas
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  //Max: space colour background, could replace with image?
+  ctx.fillStyle = '#1A102A';
+  ctx.fillRect(0,0, ctx.canvas.width, ctx.canvas.height);
 
   // ctx.fillStyle = "black"; // space is black
   // ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -227,8 +230,14 @@ function drawPlanets(ctx, dx = 0) {
 
       obj.div.style.display = "block";
       let t = ts[i];
+      
       // quadratic with intercepts at 0 and 1 peak at 0.5,1
-      obj.div.style.opacity = 1 - t;
+      // Max: added so is at full opacity for a range not a point- easier use
+      if(t< 0.5) {
+        obj.div.style.opacity = 1
+      } else {
+        obj.div.style.opacity = 2 - 2*t;
+      }
     }
 
   }
