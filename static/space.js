@@ -12,8 +12,6 @@ let scrollSize = 0.5;
 
 window.onload = function() {
 
-  
-
   var parent = document.getElementById("canvas");
 
   var canvas = document.createElement('canvas');
@@ -24,44 +22,11 @@ window.onload = function() {
 
 
   // make sure these are in order
-  makeObject("earth", "static/earth.jpg", 0, 1.2, 1, 0, 0);
+  makeObject("earth", "static/earth.jpg", 150, 1, 1, 100, 0);
   makeObject("moon", "static/moon.jpg", 2000, 3, 0.5, 0, 0);
   makeObject("mars", "static/moon.jpg", 4000, 1.5, 1, 0, 0);
   makeObject("jupiter", "static/moon.jpg", 6000, 0.5, 3, 0, 0);
 
-  const rels = [[0,0], [0,0], [0,0], [0,0]];
-
-  let i=0;
-  planets.forEach(obj=>{
-
-    let div = document.createElement("div");
-    div.className = "info-planet";
-    div.id = "info-"+obj.name;
-    div.style.opacity = 0; //Max: so doesnt appear at start
-    div.innerHTML = `<div class="chatbox">
-            <div class="messages" id="messageBox_${obj.name}">
-
-            </div>
-
-            <div class="user_input">
-                <form action="javascript:;" onsubmit="handleSubmit('${obj.name}')">
-                    <input type="text" id="user_input_${obj.name}" name="user_input"><br>
-                </form>
-            </div>
-        </div>
-        `;
-    console.log(div.innerHtml);
-
-      document.body.appendChild(div);
-    // let div = document.getElementById("info-"+obj.name);
-    // what if there is no div?
-
-    div.style.left = (obj.x + rels[i][0]) +"px";
-    div.style.top = (125 + rels[i][1]) + "px";
-    obj.div = div;
-
-    i+=1;
-  })
 
   setTimeout(() => {
     drawPlanets(ctx);
@@ -169,23 +134,42 @@ function getCurrentZooms(ctx) {
   return [zooms, ts];
 }
 
-function makeObject(name, src, x, zoom = 1, scale = 1, divRelTop, divRelLeft) {
+function makeObject(name, src, x, zoom = 1, scale = 1, divRelLeft, divRelTop) {
   let obj = {
     name: name,
     x: x,
+    y: 175, //Max: object lower gives more space for chat box
     zoom: zoom, // the extra zoom to add when focused
     // scale is the scaling of image file to unfocused size
   }
   
-  //TODO replace div with chatbox?
-  // let div = document.createElement("div");
-  // div.className = "info-planet";
-  // div.id = "info-" + name;
-  // div.style.left = (obj.x + divRelLeft) + "px";
-  // div.style.top = 125 + divRelTop + "px";
-  // div.style.opacity = 0; //Max: so doesnt appear at start
-  // document.body.appendChild(div);
-  // obj.div = div;
+  let div = document.createElement("div");
+    div.className = "info-planet";
+    div.id = "info-"+obj.name;
+    div.style.opacity = 0; //Max: so doesnt appear at start
+    div.innerHTML = `<div class="chatbox">
+            <div class="messages" id="messageBox_${obj.name}">
+
+            </div>
+
+            <div class="user_input">
+                <form action="javascript:;" onsubmit="handleSubmit('${obj.name}')">
+                    <input type="text" id="user_input_${obj.name}" name="user_input"><br>
+                </form>
+            </div>
+        </div>
+        `;
+
+      document.body.appendChild(div);
+
+    obj.relLeft = divRelLeft; //(obj.x - div.offsetWidth/2 + divRelLeft) +"px";
+    
+    // let left = obj.x + ctx.getTransform().e;
+    // obj.div.style.left = left + "px";
+    div.style.top = (125 + divRelTop) + "px";
+
+    obj.div = div;
+
 
 
   // add the image
@@ -195,7 +179,6 @@ function makeObject(name, src, x, zoom = 1, scale = 1, divRelTop, divRelLeft) {
   image.onload = function() {
     obj.width = image.width * scale;
     obj.height = image.height * scale;
-    obj.y = 175; //Max: object lower gives more space for chat box
 
     // make all (almost) white pixels transparent
     const THRESHOLD = 230;
@@ -251,14 +234,23 @@ function drawPlanets(ctx, dx = 0) {
     // console.log(obj.img)
     let obj = planets[i];
     let zoom = zooms[i];
-    let x = obj.x - obj.width * zoom / 2 +150;
-    let y = obj.y - obj.height * zoom / 2 + ctx.canvas.height / 2;
-    ctx.drawImage(obj.img, x, y, obj.width * zoom, obj.height * zoom); //obj.img.width, obj.img.height);
+    let w = obj.width*zoom;
+    let h = obj.height*zoom;
+    let x = obj.x - w/2;
+    let y = obj.y - h/2; 
+    ctx.drawImage(obj.img, x, y, w, h); //obj.img.width, obj.img.height);
 
     // update divs
-    let left = parseInt(obj.div.style.left);
-    left += dx;
+    // let left = parseInt(obj.div.style.left);
+    // left += dx;
+
+    let left = obj.x + ctx.getTransform().e - w/2 + obj.relLeft; // - obj.img.width/2 - obj.div.offsetWidth/2;
+
+
     obj.div.style.left = left + "px";
+    if(i==0){
+      console.log(ctx.getTransform().e, left);
+    }
 
 
     if (ts[i] == null) {
