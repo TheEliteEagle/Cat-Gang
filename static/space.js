@@ -61,8 +61,8 @@ window.onload = function() {
     // let div = document.getElementById("info-"+obj.name);
     // what if there is no div?
 
-    div.style.left = (obj.x + divRelLeft) +"px";
-    div.style.top = (125 + divRelTop) + "px";
+    div.style.left = (obj.x + obj.divRelLeft) +"px";
+    div.style.top = (125 + obj.divRelTop) + "px";
     obj.div = div;
 
     i+=1;
