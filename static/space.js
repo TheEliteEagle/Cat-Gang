@@ -23,10 +23,50 @@ window.onload = function() {
 
   let width = ctx.canvas.width / 2;
   // make sure these are in order
-  makeObject("earth", 150, 1, 1, 1, -300, 200, -width, 0);
-  makeObject("moon", 2000, 3, 0.5, 1, -300, 200, -width , 0);
-  // makeObject("mars", 4000, 1.5, 1, 1, 0, 0, 0, 0);
-  // makeObject("jupiter", 6000, 0.5, 3, 1, 0, 0, 0, 0);
+
+  // makeObject("sun", -6000, 0.2, 5, 0, 0, -width, 0) //333,000
+  // makeObject("mercury", -4000, 1.95, 0.05, 0, 0, -width, 0) //0.055
+  // makeObject("venus", -2000, 1.2, 0.8, 0, 0, -width, 0) //0.8
+  makeObject("earth", 0, 1, 1, 1,  0, 0, -width, 0); 
+  makeObject("moon", 2000, 1.75, 0.25, 1, 0, 0, -width, 0); //0.25
+  // makeObject("mars", 4000, 1.9, 0.1, 0, 0, -width, 0); //0.1
+  // makeObject("jupiter", 6000, 0.5, 2, 0, 0, -width, 0); //11
+  // makeObject("saturn", 8000, 0.25, 4, 0, 0, -width, 0); //95
+  // makeObject("uranus", 10000, 0.1, 2.5, 0, 0, -width, 0); //14.5
+  // makeObject("neptune", 12000, 0.15, 2.75, 0, 0, -width, 0); //17
+  // makeObject("pluto", 14000, 1.8, 0.2, 0, 0, -width, 0); //0.2
+  
+  // const rels = [[0,0], [0,0], [0,0], [0,0]];
+  //
+  // let i=0;
+  // planets.forEach(obj=>{
+  //
+  //   let div = document.createElement("div");
+  //   div.className = "info-planet";
+  //   div.id = "info-"+obj.name;
+  //   div.style.opacity = 0; //Max: so doesnt appear at start
+  //   div.innerHTML = `<div class="chatbox">
+  //           <div class="messages" id="messageBox_${obj.name}">
+  //
+  //           </div>
+  //           <br>
+  //           <div class="user_input">
+  //               <form action="javascript:;" onsubmit="handleSubmit('${obj.name}')">
+  //                   <input type="text" id="user_input_${obj.name}" placeholder = "Ask me anything..." autocomplete="off" name="user_input"><br>
+  //               </form>
+  //           </div>
+  //       </div>
+  //       `;
+  //     document.body.appendChild(div);
+  //   // let div = document.getElementById("info-"+obj.name);
+  //   // what if there is no div?
+  //
+  //   div.style.left = (obj.x + obj.divRelLeft) +"px";
+  //   div.style.top = (125 + obj.divRelTop) + "px";
+  //   obj.div = div;
+  //
+  //   i+=1;
+  // })
 
   setTimeout(() => {
     drawPlanets(ctx);
@@ -181,8 +221,8 @@ function makeObject(name, x, zoom = 1, scale = 1, alien_scale=1, alienRelX, alie
   obj.alien_img.src = alien_src;
   obj.alien_img.onload = function() {
     console.log("loaded alient img");
-    obj.alien_width = obj.alien_img.width * scale;
-    obj.alien_height = obj.alien_img.height * scale;
+    obj.alien_width = obj.alien_img.width * alien_scale;
+    obj.alien_height = obj.alien_img.height * alien_scale;
 
   }
 
