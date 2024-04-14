@@ -154,3 +154,9 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 } 
+
+.homepageAlien {
+  position: absolute;
+  width: 256px;
+  height: 256px;
+}
