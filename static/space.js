@@ -10,6 +10,9 @@ var planets = [];
 const MAX_SCROLL = 7000;
 let scrollSize = 0.5;
 
+var loading = 11; // number of planets
+var loadingText = "Loading";
+
 window.onload = function() {
 
   speechSynthesis.getVoices().forEach(function(voice) {
@@ -40,12 +43,13 @@ window.onload = function() {
   makeObject("neptune", 12000, 1.5, 0.09, 0, 0, 0, -width -100, 0); //17
   makeObject("pluto", 14000, 1.2, 0.06, 0, 0, 0, -width -300, 0); //0.2
 
-  setTimeout(() => {
-    drawPlanets(ctx);
-  }, 500);
+  // setTimeout(() => {
+  //   drawPlanets(ctx);
+  //   // loading = false;
+  // }, 500);
 
+  drawLoadingWheel(ctx);
 
-  canvas.addEventListener("click", event => {
 
     // // transform point
     // const transform = ctx.getTransform();
@@ -68,7 +72,6 @@ window.onload = function() {
     //     // because they should be far enough apart
     //   }
     // });
-  })
 
   document.addEventListener("wheel", (event) => {
     event.preventDefault();
@@ -148,6 +151,8 @@ function getCurrentZooms(ctx) {
 function makeObject(name, x, zoom = 1, scale = 1, alien_scale = 1, alienRelX, alienRelY, divRelLeft, divRelTop) {
   scale = scale * 1.6;
   zoom = zoom * 1.6;
+  x += 1200; // start earth maximised
+
   let obj = {
     name: name,
     x: x,
@@ -231,6 +236,7 @@ function makeObject(name, x, zoom = 1, scale = 1, alien_scale = 1, alienRelX, al
     let img = new Image();
     img.src = tempCanvas.toDataURL();
     obj.img = img;
+    loading -= 1;
   }
   planets.push(obj);
 }
@@ -257,14 +263,16 @@ function drawPlanets(ctx) {
   let [zooms, ts] = getCurrentZooms(ctx);
 
   for (let i = 0; i < planets.length; i += 1) {
+    console.log(planets[i]);
     let obj = planets[i];
     let zoom = zooms[i];
     let w = obj.width * zoom;
     let h = obj.height * zoom;
     let x = obj.x;
     let y = obj.y + ctx.canvas.height / 2;
+    console.log(x, y, w, h)
+    ctx.globalAlpha = 1;
     ctx.drawImage(obj.img, x - w / 2, y - h / 2, w, h); //obj.img.width, obj.img.height);
-    ctx.drawImage(obj.alien_img, x + obj.alienX, y + obj.alienY, obj.alien_width, obj.alien_height); //obj.img.width, obj.img.height);
 
     // update divs
     // let left = parseInt(obj.div.style.left);
@@ -285,9 +293,12 @@ function drawPlanets(ctx) {
       // Max: added so is at full opacity for a range not a point- easier use
       if (t < 0.5) {
         obj.div.style.opacity = 1
+        ctx.globalAlpha = 1;
       } else {
         obj.div.style.opacity = 2 - 2 * t;
+        ctx.globalAlpha = 2 - 2 * t;
       }
+    ctx.drawImage(obj.alien_img, x + obj.alienX, y + obj.alienY, obj.alien_width, obj.alien_height); //obj.img.width, obj.img.height);
 
       if (t < 0.2) {
         scrollSize = 0.06;
@@ -298,6 +309,7 @@ function drawPlanets(ctx) {
     }
 
   }
+  ctx.globalAlpha = 1;
 }
 
 // called when a planet is clicked
@@ -305,3 +317,29 @@ function onClick(object, ctx) {
   console.log(object);
 }
 
+
+function drawLoadingWheel(ctx) {
+  // Quick and nasty
+  let interval = setInterval(function() {
+    if (loading > 0) {
+      console.log(loading);
+
+      clear(ctx);
+      ctx.font = '15pt Arial ';
+      ctx.fillStyle = "#faa";
+
+      ctx.fillText(loadingText, ctx.canvas.width/2, ctx.canvas.height/2);
+      if (loadingText == "Loading...") {
+        loadingText = "Loading";
+      }
+      loadingText = loadingText + "."
+    }
+    else {
+      console.log("done");
+      clear(ctx);
+      clearInterval(interval);
+      drawPlanets(ctx);
+    }
+  }, 1);
+
+}
