@@ -7,7 +7,7 @@ var totalScroll = 0;
 
 var planets = [];
 
-const MAX_SCROLL = 15000;
+const MAX_SCROLL = 14000;
 const MIN_SCROLL = -6100;
 
 let scrollSize = 0.5;
@@ -356,10 +356,10 @@ function firstInput(planet) {
       }
     })
     .then(function(json) {
-      addBotMessage(json.response, planet);
+      addBotMessage(createBotMessageP(planet), json.response, planet);
 
     }).catch(function(err) {
-      addBotMessage("Ask me about " + planet, planet);
+      addBotMessage(createBotMessageP(planet), "Ask me about " + planet, planet);
     })
 
 }
@@ -373,12 +373,9 @@ function addUserMessage(msg, planet) {
   document.getElementById("messageBox_" + planet).appendChild(div);
 }
 
-function addBotMessage(msg, planet) {
-  let div = document.createElement("div");
-  div.classList.add("container");
-  let p = document.createTextNode(msg);
-  div.appendChild(p);
-  document.getElementById("messageBox_" + planet).appendChild(div);
+function addBotMessage(p, msg, planet) {
+  console.log(p);
+  p.textContent = msg;
 
   if (document.getElementById("tts_toggle").checked) {
     // console.log("speak")
@@ -390,6 +387,17 @@ function addBotMessage(msg, planet) {
   }
 
 }
+
+function createBotMessageP(planet){
+
+  let div = document.createElement("div");
+  div.classList.add("container");
+  let p = document.createTextNode("typing...");
+  div.appendChild(p);
+  document.getElementById("messageBox_" + planet).appendChild(div);
+  return p;
+}
+
 
 function handleSubmit(planet) {
   //console.log("RUN")
@@ -404,6 +412,10 @@ function handleSubmit(planet) {
 
 
   var data = JSON.stringify(payload);
+
+  // typing animation
+
+  let p = createBotMessageP(planet);
 
   fetch("/chatbot/" + planet,
     {
@@ -423,10 +435,10 @@ function handleSubmit(planet) {
     }
   })
     .then(function(json) {
-      addBotMessage(json.response, planet);
+      addBotMessage(p, json.response, planet);
 
     }).catch(function(err) {
-      addBotMessage("My brain isn't working right now", planet);
+      addBotMessage(p, "My brain isn't working right now", planet);
     })
 
 }
