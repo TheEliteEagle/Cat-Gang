@@ -22,17 +22,17 @@ window.onload = function() {
 
 
   // make sure these are in order
-  makeObject("sun", "static/moon.jpg", -6000, 0.2, 5, 0, 0) //333,000
-  makeObject("mercury", "static/moon.jpg", -4000, 1.95, 0.05, 0, 0) //0.055
-  makeObject("venus", "static/moon.jpg", -2000, 1.2, 0.8, 0, 0) //0.8
-  makeObject("earth", "static/earth.jpg", 0, 1, 1, 0, 0); 
-  makeObject("moon", "static/moon.jpg", 2000, 1.75, 0.25, 0, 0); //0.25
-  makeObject("mars", "static/moon.jpg", 4000, 1.9, 0.1, 0, 0); //0.1
-  makeObject("jupiter", "static/moon.jpg", 6000, 0.5, 2, 0, 0); //11
-  makeObject("saturn", "static/moon.jpg", 8000, 0.25, 4, 0, 0); //95
-  makeObject("uranus", "static/moon.jpg", 10000, 0.1, 2.5, 0, 0); //14.5
-  makeObject("neptune", "static/moon.jpg", 12000, 0.15, 2.75, 0, 0); //17
-  makeObject("pluto", "static/moon.jpg", 14000, 1.8, 0.2, 0, 0); //0.2
+  makeObject("sun", "static/moon.jpg", -6000, 1.3, 2  , 0, 0) //333,000
+  makeObject("mercury", "static/moon.jpg", -4000, 1.8, 0.5, 0, 0) //0.055
+  makeObject("venus", "static/moon.jpg", -2000, 1.6, 0.8, 0, 0) //0.8
+  makeObject("earth", "static/earth.jpg", 0, 1.4, 1, 0, 0); 
+  makeObject("moon", "static/moon.jpg", 2000, 1.75, 0.5, 0, 0); //0.25
+  makeObject("mars", "static/moon.jpg", 4000, 1.5, 0.8, 0, 0); //0.1
+  makeObject("jupiter", "static/moon.jpg", 6000, 1.5, 1.6, 0, 0); //11
+  makeObject("saturn", "static/moon.jpg", 8000, 1.4, 1.8, 0, 0); //95
+  makeObject("uranus", "static/moon.jpg", 10000, 1.4, 1, 0, 0); //14.5
+  makeObject("neptune", "static/moon.jpg", 12000, 1.5, 0.9, 0, 0); //17
+  makeObject("pluto", "static/moon.jpg", 14000, 1.2, 0.6, 0, 0); //0.2
   
   // const rels = [[0,0], [0,0], [0,0], [0,0]];
 
