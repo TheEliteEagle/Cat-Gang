@@ -18,9 +18,9 @@ var loadingText = "Loading";
 window.onload = function() {
 
   speechSynthesis.getVoices().forEach(function(voice) {
-    console.log(voice.name, voice.default ? voice.default :'');
+    console.log(voice.name, voice.default ? voice.default : '');
   });
-  
+
 
   var parent = document.getElementById("canvas");
 
@@ -34,16 +34,16 @@ window.onload = function() {
   let width = ctx.canvas.width / 3;
   // make sure these are in order
   makeObject("sun", -6000, 1.3, 0.23, 0, 0, 0, -width + 175, 0) //333,000
-  makeObject("mercury", -4000, 1.8, 0.05, 0, 0, 0, -width -200, 0) //0.055
-  makeObject("venus", -2000, 1.6, 0.08, 0, 0, 0, -width -175, 0) //0.8
-  makeObject("earth", 0, 1.4, 0.1, 0, 0, 0, -width -175, 0);
-  makeObject("moon", 2000, 1.75, 0.05, 0, 0, 0, -width -200, 0); //0.25
-  makeObject("mars", 4000, 1.5, 0.08, 0, 0, 0, -width -150, 0); //0.1
+  makeObject("mercury", -4000, 1.8, 0.05, 0, 0, 0, -width - 200, 0) //0.055
+  makeObject("venus", -2000, 1.6, 0.08, 0, 0, 0, -width - 175, 0) //0.8
+  makeObject("earth", 0, 1.4, 0.1, 0, 0, 0, -width - 175, 0);
+  makeObject("moon", 2000, 1.75, 0.05, 0, 0, 0, -width - 200, 0); //0.25
+  makeObject("mars", 4000, 1.5, 0.08, 0, 0, 0, -width - 150, 0); //0.1
   makeObject("jupiter", 6000, 1.5, 0.16, 0.35, -1200, -200, -width, 0); //11
   makeObject("saturn", 8000, 1.4, 0.18, 0, 0, 0, -width, 0); //95
   makeObject("uranus", 10000, 1.4, 0.1, 0, 0, 0, -width, 0); //14.5
-  makeObject("neptune", 12000, 1.5, 0.09, 0, 0, 0, -width -100, 0); //17
-  makeObject("pluto", 14000, 1.2, 0.06, 0, 0, 0, -width -300, 0); //0.2
+  makeObject("neptune", 12000, 1.5, 0.09, 0, 0, 0, -width - 100, 0); //17
+  makeObject("pluto", 14000, 1.2, 0.06, 0, 0, 0, -width - 300, 0); //0.2
 
   // setTimeout(() => {
   //   drawPlanets(ctx);
@@ -53,27 +53,27 @@ window.onload = function() {
   drawLoadingWheel(ctx);
 
 
-    // // transform point
-    // const transform = ctx.getTransform();
-    // const x = event.offsetX - transform.e;
-    // const y = event.offsetY - transform.f - ctx.canvas.height / 2;
-    //
-    // let zoom = getCurrentZoom();
-    //
-    // // find which object was clicked
-    // let any = false;
-    // planets.forEach(obj => {
-    //   // if the x,y is in this object;
-    //   if (obj.x - obj.width * zoom / 2 <= x &&
-    //     obj.y - obj.height * zoom / 2 <= y &&
-    //     x <= obj.x + obj.width * zoom / 2 &&
-    //     y <= obj.y + obj.height * zoom / 2) {
-    //     onClick(obj, ctx);
-    //     any = true;
-    //     // dont worry about multiple objects being clicked at the same time
-    //     // because they should be far enough apart
-    //   }
-    // });
+  // // transform point
+  // const transform = ctx.getTransform();
+  // const x = event.offsetX - transform.e;
+  // const y = event.offsetY - transform.f - ctx.canvas.height / 2;
+  //
+  // let zoom = getCurrentZoom();
+  //
+  // // find which object was clicked
+  // let any = false;
+  // planets.forEach(obj => {
+  //   // if the x,y is in this object;
+  //   if (obj.x - obj.width * zoom / 2 <= x &&
+  //     obj.y - obj.height * zoom / 2 <= y &&
+  //     x <= obj.x + obj.width * zoom / 2 &&
+  //     y <= obj.y + obj.height * zoom / 2) {
+  //     onClick(obj, ctx);
+  //     any = true;
+  //     // dont worry about multiple objects being clicked at the same time
+  //     // because they should be far enough apart
+  //   }
+  // });
 
   document.addEventListener("wheel", (event) => {
     event.preventDefault();
@@ -81,13 +81,13 @@ window.onload = function() {
 
     totalScroll -= dx; // rightward scroll is negative
 
-    
-    if(totalScroll < MIN_SCROLL){
+
+    if (totalScroll < MIN_SCROLL) {
       dx = 0;
       totalScroll = MIN_SCROLL;
     }
-    else if (totalScroll > MAX_SCROLL){
-      dx  = 0;
+    else if (totalScroll > MAX_SCROLL) {
+      dx = 0;
       totalScroll = MAX_SCROLL
     }
     totalScroll = Math.max(MIN_SCROLL, totalScroll);
@@ -200,7 +200,6 @@ function makeObject(name, x, zoom = 1, scale = 1, alien_scale = 1, alienRelX, al
         `;
 
   document.body.appendChild(div);
-  firstInput(obj.name);
   obj.relLeft = divRelLeft; //(obj.x - div.offsetWidth/2 + divRelLeft) +"px";
 
   // let left = obj.x + ctx.getTransform().e;
@@ -255,6 +254,8 @@ function makeObject(name, x, zoom = 1, scale = 1, alien_scale = 1, alienRelX, al
     loading -= 1;
   }
   planets.push(obj);
+  firstInput(obj.name);
+
 }
 
 
@@ -312,7 +313,7 @@ function drawPlanets(ctx) {
         obj.div.style.opacity = 2 - 2 * t;
         ctx.globalAlpha = 2 - 2 * t;
       }
-    ctx.drawImage(obj.alien_img, x + obj.alienX, y + obj.alienY, obj.alien_width, obj.alien_height); //obj.img.width, obj.img.height);
+      ctx.drawImage(obj.alien_img, x + obj.alienX, y + obj.alienY, obj.alien_width, obj.alien_height); //obj.img.width, obj.img.height);
 
       if (t < 0.2) {
         scrollSize = 0.06;
@@ -331,6 +332,105 @@ function onClick(object, ctx) {
   console.log(object);
 }
 
+function firstInput(planet) {
+  var payload = {
+    user_input: "Hello! Tell me more about your planet."
+  };
+  var data = JSON.stringify(payload);
+
+  fetch("/chatbot/" + planet,
+    {
+      method: "POST",
+      body: data,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+    .then(function(res) {
+      console.log(res);
+      if (res.ok) {
+        return res.json()
+      }
+      else {
+        throw new Error('Bad Things have happened in the back end');
+      }
+    })
+    .then(function(json) {
+      addBotMessage(json.response, planet);
+
+    }).catch(function(err) {
+      addBotMessage("Ask me about " + planet, planet);
+    })
+
+}
+
+function addUserMessage(msg, planet) {
+  let div = document.createElement("div");
+  div.classList.add("container");
+  div.classList.add("darker");
+  let p = document.createTextNode(msg);
+  div.appendChild(p);
+  document.getElementById("messageBox_" + planet).appendChild(div);
+}
+
+function addBotMessage(msg, planet) {
+  let div = document.createElement("div");
+  div.classList.add("container");
+  let p = document.createTextNode(msg);
+  div.appendChild(p);
+  document.getElementById("messageBox_" + planet).appendChild(div);
+
+  if (document.getElementById("tts_toggle").checked) {
+    // console.log("speak")
+    var tts = new SpeechSynthesisUtterance();
+    // var voices = window.speechSynthesis.getVoices();
+    tts.text = msg;
+    // tts.voice = voice[1];
+    window.speechSynthesis.speak(tts);
+  }
+
+}
+
+function handleSubmit(planet) {
+  //console.log("RUN")
+  let input = document.getElementById("user_input_" + planet).value
+  addUserMessage(input, planet);
+  document.getElementById("user_input_" + planet).value = ""
+
+  var payload = {
+    user_input: input
+  };
+
+
+
+  var data = JSON.stringify(payload);
+
+  fetch("/chatbot/" + planet,
+    {
+      method: "POST",
+      body: data,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+  .then(function(res) {
+    console.log(res);
+    if (res.ok) {
+      return res.json()
+    }
+    else {
+      throw new Error('Bad Things have happened in the back end');
+    }
+  })
+    .then(function(json) {
+      addBotMessage(json.response, planet);
+
+    }).catch(function(err) {
+      addBotMessage("My brain isn't working right now", planet);
+    })
+
+}
+
 
 function drawLoadingWheel(ctx) {
   // Quick and nasty
@@ -342,7 +442,7 @@ function drawLoadingWheel(ctx) {
       ctx.font = '15pt Arial ';
       ctx.fillStyle = "#faa";
 
-      ctx.fillText(loadingText, ctx.canvas.width/2, ctx.canvas.height/2);
+      ctx.fillText(loadingText, ctx.canvas.width / 2, ctx.canvas.height / 2);
       if (loadingText == "Loading...") {
         loadingText = "Loading";
       }
