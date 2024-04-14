@@ -31,7 +31,7 @@ def chatbot(planet):
         previous = ""
     else:
         previous = session[planet+"_previous"]
-
+    print(planet)
     #convert name to ID
     match planet:
         case "sun": ID = 1
@@ -40,7 +40,7 @@ def chatbot(planet):
         case "earth": ID = 4
         case "mars": ID = 5
         case "asteroid": ID = 6
-        case "juptiter": ID = 7
+        case "jupiter": ID = 7
         case "saturn": ID = 8
         case "uranus": ID = 9
         case "neptune": ID = 10
