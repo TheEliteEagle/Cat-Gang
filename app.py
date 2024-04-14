@@ -20,16 +20,17 @@ def chatbot_test():
 def chatbot_test2():
     return render_template("ai_test_reformat.html")
 
-@app.route("/chatbot/mars", methods=["POST"])
-def chatbot_mars():
+@app.route("/chatbot/<planet>", methods=["POST"])
+def chatbot(planet):
+    print("planet is", planet)
     # Probably should do input sanitisation and error handling
     user_input = request.get_json()['user_input']
-    if session.get("mars_previous") == None:
+    if session.get(planet+"_previous") == None:
         previous = ""
     else:
-        previous = session["mars_previous"]
+        previous = session[planet+"_previous"]
 
-    response, session["mars_previous"] = AiText.getResponse(user_input, previous, 2)
+    response, session[planet+"_previous"] = AiText.getResponse(user_input, previous, 2)
 
     return {"response":response}
 

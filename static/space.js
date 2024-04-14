@@ -32,11 +32,29 @@ window.onload = function() {
 
   let i=0;
   planets.forEach(obj=>{
-    let div = document.getElementById("info-"+obj.name);
+
+    let div = document.createElement("div");
+    div.className = "info-planet";
+    div.id = "info-"+obj.name;
+    div.innerHTML = `<div class="chatbox">
+            <div class="messages" id="messageBox_${obj.name}">
+
+            </div>
+
+            <div class="user_input">
+                <form action="javascript:;" onsubmit="handleSubmit('${obj.name}')">
+                    <input type="text" id="user_input_${obj.name}" name="user_input"><br>
+                </form>
+            </div>
+        </div>
+        `;
+    console.log(div.innerHtml);
+
+      document.body.appendChild(div);
+    // let div = document.getElementById("info-"+obj.name);
     // what if there is no div?
 
-    console.log("info-"+obj.name, div);
-    div.style.left = obj.x + rels[i][0];
+    div.style.left = (obj.x + rels[i][0]) +"px";
     div.style.top = rels[i][1];
     obj.div = div;
 
