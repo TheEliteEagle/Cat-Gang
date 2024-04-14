@@ -21,11 +21,12 @@ window.onload = function() {
   var ctx = canvas.getContext('2d');
 
 
+  let width = ctx.canvas.width / 2;
   // make sure these are in order
-  makeObject("earth", "static/earth.jpg", 150, 1, 1, 100, 0);
-  makeObject("moon", "static/moon.jpg", 2000, 3, 0.5, 0, 0);
-  makeObject("mars", "static/moon.jpg", 4000, 1.5, 1, 0, 0);
-  makeObject("jupiter", "static/moon.jpg", 6000, 0.5, 3, 0, 0);
+  makeObject("earth", 150, 1, 1, 1, -300, 200, -width, 0);
+  makeObject("moon", 2000, 3, 0.5, 1, -300, 200, -width , 0);
+  // makeObject("mars", 4000, 1.5, 1, 1, 0, 0, 0, 0);
+  // makeObject("jupiter", 6000, 0.5, 3, 1, 0, 0, 0, 0);
 
   setTimeout(() => {
     drawPlanets(ctx);
@@ -95,7 +96,7 @@ function getCurrentZooms(ctx) {
   let ts = [];
 
   let boundSize = ctx.canvas.width / 3;
-  let middle = ctx.canvas.width / 2;
+  let middle = ctx.canvas.width *3/ 4; // middle of slow section in window 
   let leftBound = middle - boundSize;
   let rightBound = middle + boundSize;
 
@@ -133,14 +134,19 @@ function getCurrentZooms(ctx) {
   return [zooms, ts];
 }
 
-function makeObject(name, src, x, zoom = 1, scale = 1, divRelLeft, divRelTop) {
+function makeObject(name, x, zoom = 1, scale = 1, alien_scale=1, alienRelX, alienRelY, divRelLeft, divRelTop) {
   let obj = {
     name: name,
     x: x,
-    y: 175, //Max: object lower gives more space for chat box
+    y: 0,
     zoom: zoom, // the extra zoom to add when focused
     // scale is the scaling of image file to unfocused size
+
+    alienX: alienRelX,
+    alienY: alienRelY,
   }
+  let src = `static/${name}.jpg`;
+  let alien_src = `static/${name}_alien.jpg`;
   
   let div = document.createElement("div");
     div.className = "info-planet";
@@ -170,8 +176,17 @@ function makeObject(name, src, x, zoom = 1, scale = 1, divRelLeft, divRelTop) {
     obj.div = div;
 
 
+  // add the planet image
+  obj.alien_img = new Image();
+  obj.alien_img.src = alien_src;
+  obj.alien_img.onload = function() {
+    console.log("loaded alient img");
+    obj.alien_width = obj.alien_img.width * scale;
+    obj.alien_height = obj.alien_img.height * scale;
 
-  // add the image
+  }
+
+  // add the planet image
   let image = new Image();
   image.src = src;
   // if the image transparency is good we dont need this;
@@ -226,7 +241,7 @@ function clear(ctx) {
   ctx.restore();
 }
 
-function drawPlanets(ctx, dx = 0) {
+function drawPlanets(ctx) {
   let [zooms, ts] = getCurrentZooms(ctx);
 
   for (let i = 0; i < planets.length; i += 1) {
@@ -235,22 +250,18 @@ function drawPlanets(ctx, dx = 0) {
     let zoom = zooms[i];
     let w = obj.width*zoom;
     let h = obj.height*zoom;
-    let x = obj.x - w/2;
-    let y = obj.y - h/2; 
-    ctx.drawImage(obj.img, x, y, w, h); //obj.img.width, obj.img.height);
+    let x = obj.x;
+    let y = obj.y + ctx.canvas.height/2; 
+    ctx.drawImage(obj.img, x-w/2, y-h/2, w, h); //obj.img.width, obj.img.height);
+    console.log(w, h, obj.alien_width, obj.alien_height, obj);
+    ctx.drawImage(obj.alien_img, x+obj.alienX, y+obj.alienY, obj.alien_width, obj.alien_height); //obj.img.width, obj.img.height);
 
     // update divs
     // let left = parseInt(obj.div.style.left);
     // left += dx;
 
     let left = obj.x + ctx.getTransform().e - w/2 + obj.relLeft; // - obj.img.width/2 - obj.div.offsetWidth/2;
-
-
     obj.div.style.left = left + "px";
-    if(i==0){
-      console.log(ctx.getTransform().e, left);
-    }
-
 
     if (ts[i] == null) {
       // outside the screen
