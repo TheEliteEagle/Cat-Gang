@@ -7,7 +7,7 @@ var totalScroll = 0;
 
 var planets = [];
 
-const MAX_SCROLL = 15000;
+const MAX_SCROLL = 14000;
 const MIN_SCROLL = -6100;
 
 let scrollSize = 0.5;
@@ -33,17 +33,17 @@ window.onload = function() {
 
   let width = ctx.canvas.width / 3;
   // make sure these are in order
-  makeObject("sun", -6000, 1.3, 0.23, 0.35, -1200, -200, -width + 175, 0) //333,000
-  makeObject("mercury", -4000, 1.8, 0.05, 0.35, -1200, -200, -width - 200, 0) //0.055
-  makeObject("venus", -2000, 1.6, 0.08, 0.35, -1200, -200, -width - 175, 0) //0.8
-  makeObject("earth", 0, 1.4, 0.1, 0.35, -1200, -200, -width - 175, 0);
-  makeObject("moon", 2000, 1.75, 0.05, 0.35, -1200, -200, -width - 200, 0); //0.25
-  makeObject("mars", 4000, 1.5, 0.08, 0.35, -1200, -200, -width - 150, 0); //0.1
-  makeObject("jupiter", 6000, 1.5, 0.16, 0.35, -1200, -200, -width, 0); //11
-  makeObject("saturn", 8000, 1.4, 0.18, 0.35, -1200, -200, -width, 0); //95
-  makeObject("uranus", 10000, 1.4, 0.1, 0.35, -1200, -200, -width, 0); //14.5
-  makeObject("neptune", 12000, 1.5, 0.09, 0.35, -1200, -200, -width - 100, 0); //17
-  makeObject("pluto", 14000, 1.2, 0.06, 0.35, -1200, -200, -width - 300, 0); //0.2
+  makeObject("sun", -6000, 1.3, 0.23, 0.25, -1100, -50, -width + 175, 0) //333,000
+  makeObject("mercury", -4000, 1.8, 0.05, 0.3, -1100, -100, -width - 200, 0) //0.055
+  makeObject("venus", -2000, 1.6, 0.08, 0.35, -1350, -200, -width, 0) //0.8
+  makeObject("earth", 0, 1.4, 0.1, 0.3, -1200, -100, -width - 175, -50);
+  makeObject("moon", 2000, 1.75, 0.05, 0.35, -1300, -200, -width -75, -50); //0.25
+  makeObject("mars", 4000, 1.5, 0.08, 0.35, -700, -200, -width - 350, 0); //0.1
+  makeObject("jupiter", 6000, 1.5, 0.16, 0.2, -950, 0, -width, 0); //11
+  makeObject("saturn", 8000, 1.4, 0.18, 0.25, -1200, -75, -width, 0); //95
+  makeObject("uranus", 10000, 1.4, 0.1, 0.35, -1200, -175, -width, -70); //14.5
+  makeObject("neptune", 12000, 1.5, 0.09, 0.35, -1275, -200, -width - 100, -70); //17
+  makeObject("pluto", 14000, 1.2, 0.06, 0.35, -750, -200, -width - 450, 0); //0.2
 
   // setTimeout(() => {
   //   drawPlanets(ctx);
@@ -356,10 +356,10 @@ function firstInput(planet) {
       }
     })
     .then(function(json) {
-      addBotMessage(json.response, planet);
+      addBotMessage(createBotMessageP(planet), json.response, planet);
 
     }).catch(function(err) {
-      addBotMessage("Ask me about " + planet, planet);
+      addBotMessage(createBotMessageP(planet), "Ask me about " + planet, planet);
     })
 
 }
@@ -373,12 +373,12 @@ function addUserMessage(msg, planet) {
   document.getElementById("messageBox_" + planet).appendChild(div);
 }
 
-function addBotMessage(msg, planet) {
-  let div = document.createElement("div");
-  div.classList.add("container");
-  let p = document.createTextNode(msg);
-  div.appendChild(p);
-  document.getElementById("messageBox_" + planet).appendChild(div);
+function addBotMessage(p, msg, planet) {
+  console.log(p);
+  p.textContent = msg;
+
+  // scroll to bottom
+  p.parentElement.parentElement.scrollTo(0, 9999);
 
   if (document.getElementById("tts_toggle").checked) {
     // console.log("speak")
@@ -389,7 +389,23 @@ function addBotMessage(msg, planet) {
     window.speechSynthesis.speak(tts);
   }
 
+
+
 }
+
+function createBotMessageP(planet){
+
+  let div = document.createElement("div");
+  div.classList.add("container");
+  let p = document.createTextNode("typing...");
+  div.appendChild(p);
+  document.getElementById("messageBox_" + planet).appendChild(div);
+  
+  p.parentElement.parentElement.scrollTo(0, 9999);
+  
+  return p;
+}
+
 
 function handleSubmit(planet) {
   //console.log("RUN")
@@ -404,6 +420,10 @@ function handleSubmit(planet) {
 
 
   var data = JSON.stringify(payload);
+
+  // typing animation
+
+  let p = createBotMessageP(planet);
 
   fetch("/chatbot/" + planet,
     {
@@ -423,10 +443,10 @@ function handleSubmit(planet) {
     }
   })
     .then(function(json) {
-      addBotMessage(json.response, planet);
+      addBotMessage(p, json.response, planet);
 
     }).catch(function(err) {
-      addBotMessage("My brain isn't working right now", planet);
+      addBotMessage(p, "My brain isn't working right now", planet);
     })
 
 }
