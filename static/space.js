@@ -33,17 +33,17 @@ window.onload = function() {
 
   let width = ctx.canvas.width / 3;
   // make sure these are in order
-  makeObject("sun", -6000, 1.3, 0.23, 0, 0, 0, -width + 175, 0) //333,000
-  makeObject("mercury", -4000, 1.8, 0.05, 0, 0, 0, -width - 200, 0) //0.055
-  makeObject("venus", -2000, 1.6, 0.08, 0, 0, 0, -width - 175, 0) //0.8
-  makeObject("earth", 0, 1.4, 0.1, 0, 0, 0, -width - 175, 0);
-  makeObject("moon", 2000, 1.75, 0.05, 0, 0, 0, -width - 200, 0); //0.25
-  makeObject("mars", 4000, 1.5, 0.08, 0, 0, 0, -width - 150, 0); //0.1
+  makeObject("sun", -6000, 1.3, 0.23, 0.35, -1200, -200, -width + 175, 0) //333,000
+  makeObject("mercury", -4000, 1.8, 0.05, 0.35, -1200, -200, -width - 200, 0) //0.055
+  makeObject("venus", -2000, 1.6, 0.08, 0.35, -1200, -200, -width - 175, 0) //0.8
+  makeObject("earth", 0, 1.4, 0.1, 0.35, -1200, -200, -width - 175, 0);
+  makeObject("moon", 2000, 1.75, 0.05, 0.35, -1200, -200, -width - 200, 0); //0.25
+  makeObject("mars", 4000, 1.5, 0.08, 0.35, -1200, -200, -width - 150, 0); //0.1
   makeObject("jupiter", 6000, 1.5, 0.16, 0.35, -1200, -200, -width, 0); //11
-  makeObject("saturn", 8000, 1.4, 0.18, 0, 0, 0, -width, 0); //95
-  makeObject("uranus", 10000, 1.4, 0.1, 0, 0, 0, -width, 0); //14.5
-  makeObject("neptune", 12000, 1.5, 0.09, 0, 0, 0, -width - 100, 0); //17
-  makeObject("pluto", 14000, 1.2, 0.06, 0, 0, 0, -width - 300, 0); //0.2
+  makeObject("saturn", 8000, 1.4, 0.18, 0.35, -1200, -200, -width, 0); //95
+  makeObject("uranus", 10000, 1.4, 0.1, 0.35, -1200, -200, -width, 0); //14.5
+  makeObject("neptune", 12000, 1.5, 0.09, 0.35, -1200, -200, -width - 100, 0); //17
+  makeObject("pluto", 14000, 1.2, 0.06, 0.35, -1200, -200, -width - 300, 0); //0.2
 
   // setTimeout(() => {
   //   drawPlanets(ctx);
