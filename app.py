@@ -22,7 +22,7 @@ def chatbot_test2():
 
 @app.route("/chatbot/<planet>", methods=["POST"])
 def chatbot(planet):
-    print("planet is", planet)
+    #print("planet is", planet)
     # Probably should do input sanitisation and error handling
     user_input = request.get_json()['user_input']
     if session.get(planet+"_previous") == None:
@@ -30,7 +30,25 @@ def chatbot(planet):
     else:
         previous = session[planet+"_previous"]
 
-    response, session[planet+"_previous"] = AiText.getResponse(user_input, previous, 2)
+    #convert name to ID
+    match planet:
+        case "sun": ID = 1
+        case "mercury": ID = 2
+        case "venus": ID = 3
+        case "earth": ID = 4
+        case "mars": ID = 5
+        case "asteroid": ID = 6
+        case "juptiter": ID = 7
+        case "saturn": ID = 8
+        case "uranus": ID = 9
+        case "neptune": ID = 10
+        case "pluto": ID = 11
+        case "moon": ID = 12
+        
+    print(ID)
+
+    
+    response, session[planet+"_previous"] = AiText.getResponse(user_input, previous, ID)
 
     return {"response":response}
 

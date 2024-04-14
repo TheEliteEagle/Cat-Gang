@@ -15,7 +15,7 @@
       document.getElementById("messageBox_"+planet).appendChild(div);
     }
 
-    function addBotMessage(msg) {
+    function addBotMessage(msg, planet) {
       let div = document.createElement("div");
       div.classList.add("container");
       let p = document.createTextNode(msg);
@@ -46,7 +46,7 @@
           return res.json()
         })
         .then(function (json) {
-          addBotMessage(json.response);
+          addBotMessage(json.response, planet);
 
         })
     }

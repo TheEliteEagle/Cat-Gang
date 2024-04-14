@@ -36,6 +36,7 @@ window.onload = function() {
     let div = document.createElement("div");
     div.className = "info-planet";
     div.id = "info-"+obj.name;
+    div.style.opacity = 0; //Max: so doesnt appear at start
     div.innerHTML = `<div class="chatbox">
             <div class="messages" id="messageBox_${obj.name}">
 
@@ -96,7 +97,7 @@ window.onload = function() {
     let dx = -event.wheelDeltaY * scrollSize;
 
     totalScroll -= dx; // rightward scroll is negative
-    console.log(totalScroll);
+    //console.log(totalScroll);
 
     // clear the canvas to re-draw
     clear(ctx);
