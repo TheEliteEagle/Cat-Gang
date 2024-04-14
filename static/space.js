@@ -45,7 +45,7 @@ window.onload = function() {
 
             <div class="user_input">
                 <form action="javascript:;" onsubmit="handleSubmit('${obj.name}')">
-                    <input type="text" id="user_input_${obj.name}" name="user_input"><br>
+                    <input type="text" id="user_input_${obj.name}" placeholder = "Ask me anything..." autocomplete="off" name="user_input"><br>
                 </form>
             </div>
         </div>
