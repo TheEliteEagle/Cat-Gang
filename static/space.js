@@ -15,6 +15,11 @@ var loadingText = "Loading";
 
 window.onload = function() {
 
+  speechSynthesis.getVoices().forEach(function(voice) {
+    console.log(voice.name, voice.default ? voice.default :'');
+  });
+  
+
   var parent = document.getElementById("canvas");
 
   var canvas = document.createElement('canvas');
@@ -26,17 +31,17 @@ window.onload = function() {
 
   let width = ctx.canvas.width / 3;
   // make sure these are in order
-  makeObject("sun", -6000, 1.3, 0.23, 0, 0, 0, -width, 0) //333,000
-  makeObject("mercury", -4000, 1.8, 0.05, 0, 0, 0, -width, 0) //0.055
-  makeObject("venus", -2000, 1.6, 0.08, 0, 0, 0, -width, 0) //0.8
-  makeObject("earth", 0, 1.4, 0.1, 0, 0, 0, -width, 0);
-  makeObject("moon", 2000, 1.75, 0.05, 0, 0, 0, -width, 0); //0.25
-  makeObject("mars", 4000, 1.5, 0.08, 0, 0, 0, -width, 0); //0.1
+  makeObject("sun", -6000, 1.3, 0.23, 0, 0, 0, -width + 175, 0) //333,000
+  makeObject("mercury", -4000, 1.8, 0.05, 0, 0, 0, -width -200, 0) //0.055
+  makeObject("venus", -2000, 1.6, 0.08, 0, 0, 0, -width -175, 0) //0.8
+  makeObject("earth", 0, 1.4, 0.1, 0, 0, 0, -width -175, 0);
+  makeObject("moon", 2000, 1.75, 0.05, 0, 0, 0, -width -200, 0); //0.25
+  makeObject("mars", 4000, 1.5, 0.08, 0, 0, 0, -width -150, 0); //0.1
   makeObject("jupiter", 6000, 1.5, 0.16, 0.35, -1200, -200, -width, 0); //11
   makeObject("saturn", 8000, 1.4, 0.18, 0, 0, 0, -width, 0); //95
-  makeObject("uranus", 10000, 1.4, 0.1, 0, 0, 0, - width, 0); //14.5
-  makeObject("neptune", 12000, 1.5, 0.09, 0, 0, 0, -width, 0); //17
-  makeObject("pluto", 14000, 1.2, 0.06, 0, 0, 0, -width, 0); //0.2
+  makeObject("uranus", 10000, 1.4, 0.1, 0, 0, 0, -width, 0); //14.5
+  makeObject("neptune", 12000, 1.5, 0.09, 0, 0, 0, -width -100, 0); //17
+  makeObject("pluto", 14000, 1.2, 0.06, 0, 0, 0, -width -300, 0); //0.2
 
   // setTimeout(() => {
   //   drawPlanets(ctx);
@@ -172,7 +177,7 @@ function makeObject(name, x, zoom = 1, scale = 1, alien_scale = 1, alienRelX, al
 
             <div class="user_input">
                 <form action="javascript:;" onsubmit="handleSubmit('${obj.name}')">
-            <input type="text" id="userinput${obj.name}" placeholder = "Ask me anything..." autocomplete="off" name="user_input"><br>
+            <input type="text" id="user_input_${obj.name}" placeholder = "Ask me anything..." autocomplete="off" name="user_input"><br>
                 </form>
             </div>
         </div>
@@ -304,6 +309,7 @@ function drawPlanets(ctx) {
     }
 
   }
+  ctx.globalAlpha = 1;
 }
 
 // called when a planet is clicked
