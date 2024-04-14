@@ -64,7 +64,7 @@ window.onload = function() {
     let dx = -event.wheelDeltaY * scrollSize;
 
     totalScroll -= dx; // rightward scroll is negative
-
+    console.log(totalScroll);
 
     // clear the canvas to re-draw
     clear(ctx);

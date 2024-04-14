@@ -16,6 +16,10 @@ def index():
 def chatbot_test():
     return render_template("ai_test.html")
 
+@app.route("/chatbot/test2")
+def chatbot_test2():
+    return render_template("ai_test_reformat.html")
+
 @app.route("/chatbot/mars", methods=["POST"])
 def chatbot_mars():
     # Probably should do input sanitisation and error handling
