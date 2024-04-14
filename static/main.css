@@ -16,9 +16,10 @@ div#canvas {
 div.info-planet{
   position: absolute;
   background-color: #536872;
-  width: 300px;
+  width: 700px;
   height: 300px;
   overflow: auto;
+  border-radius: 25px;
 
 }
 

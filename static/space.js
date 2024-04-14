@@ -28,6 +28,20 @@ window.onload = function() {
   makeObject("mars", "static/moon.jpg", 4000, 1.5, 1, 0, 0);
   makeObject("jupiter", "static/moon.jpg", 6000, 0.5, 3, 0, 0);
 
+  const rels = [[0,0], [0,0], [0,0], [0,0]];
+
+  let i=0;
+  planets.forEach(obj=>{
+    let div = document.getElementById("info-"+obj.name);
+    // what if there is no div?
+
+    console.log("info-"+obj.name, div);
+    div.style.left = obj.x + rels[i][0];
+    div.style.top = rels[i][1];
+    obj.div = div;
+
+    i+=1;
+  })
 
   setTimeout(() => {
     drawPlanets(ctx);
@@ -144,14 +158,14 @@ function makeObject(name, src, x, zoom = 1, scale = 1, divRelTop, divRelLeft) {
   }
   
   //TODO replace div with chatbox?
-  let div = document.createElement("div");
-  div.className = "info-planet";
-  div.id = "info-" + name;
-  div.style.left = (obj.x + divRelLeft) + "px";
-  div.style.top = divRelTop + "px";
-  div.style.opacity = 0; //Max: so doesnt appear at start
-  document.body.appendChild(div);
-  obj.div = div;
+  // let div = document.createElement("div");
+  // div.className = "info-planet";
+  // div.id = "info-" + name;
+  // div.style.left = (obj.x + divRelLeft) + "px";
+  // div.style.top = 125 + divRelTop + "px";
+  // div.style.opacity = 0; //Max: so doesnt appear at start
+  // document.body.appendChild(div);
+  // obj.div = div;
 
 
   // add the image
@@ -217,7 +231,7 @@ function drawPlanets(ctx, dx = 0) {
     // console.log(obj.img)
     let obj = planets[i];
     let zoom = zooms[i];
-    let x = obj.x - obj.width * zoom / 2;
+    let x = obj.x - obj.width * zoom / 2 +150;
     let y = obj.y - obj.height * zoom / 2 + ctx.canvas.height / 2;
     ctx.drawImage(obj.img, x, y, obj.width * zoom, obj.height * zoom); //obj.img.width, obj.img.height);
 
