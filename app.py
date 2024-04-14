@@ -9,11 +9,13 @@ Session(app)
 
 @app.route("/")
 def index():
+    session.clear()
     return render_template("index.html")
 
 
 @app.route("/chatbot/test")
 def chatbot_test():
+    session.clear()
     return render_template("ai_test.html")
 
 @app.route("/chatbot/test2")
@@ -51,8 +53,6 @@ def chatbot(planet):
     response, session[planet+"_previous"] = AiText.getResponse(user_input, previous, ID)
 
     return {"response":response}
-
-
 
 # with app.app_context():
 #     # Start AI conversations
