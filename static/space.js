@@ -12,6 +12,11 @@ let scrollSize = 0.5;
 
 window.onload = function() {
 
+  speechSynthesis.getVoices().forEach(function(voice) {
+    console.log(voice.name, voice.default ? voice.default :'');
+  });
+  
+
   var parent = document.getElementById("canvas");
 
   var canvas = document.createElement('canvas');
