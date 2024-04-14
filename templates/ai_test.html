@@ -27,7 +27,7 @@
 
         function handleSubmit()
         {
-            
+            //console.log("RUN")
             addUserMessage(document.getElementById("user_input").value);
             
             var payload = {
@@ -88,5 +88,33 @@
             </div>
         </div>
     </div>
+
+    <!-- Max: This is scuffed im sorry but adds default start paragraph (copy from handleSubmit() above but with manual message)-->
+    <script type = "text/javascript">
+        var payload = {
+                user_input: "Hi! Tell me more about your planet"
+            };
+
+            var data = JSON.stringify( payload );
+
+            fetch("/chatbot/mars",
+                {
+                    method: "POST",
+                    body: data,
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+            .then(function(res){ 
+                return res.json()
+            })
+            .then(function(json){
+                addBotMessage(json.response);
+
+            })
+
+        
+    </script>
+
   </body>
 </html>

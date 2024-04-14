@@ -17,7 +17,7 @@ window.onload = function() {
 
   var canvas = document.createElement('canvas');
   canvas.width = parent.offsetWidth;
-  canvas.height = parent.offsetHeight;; //Max: why 2?
+  canvas.height = parent.offsetHeight;; //Max: why 2 ; ?
   parent.appendChild(canvas);
   var ctx = canvas.getContext('2d');
 
@@ -61,7 +61,6 @@ window.onload = function() {
 
   document.addEventListener("wheel", (event) => {
     event.preventDefault();
-
     let dx = -event.wheelDeltaY * scrollSize;
 
     totalScroll -= dx; // rightward scroll is negative
@@ -85,6 +84,11 @@ window.onload = function() {
     drawPlanets(ctx);
   };
 
+  
+  //Max: avoid visual bug at start by redrawing after load
+  clear(ctx); 
+  
+  
 }
 
 function getCurrentZooms(ctx) {
@@ -138,13 +142,14 @@ function makeObject(name, src, x, zoom = 1, scale = 1, divRelTop, divRelLeft) {
     zoom: zoom, // the extra zoom to add when focused
     // scale is the scaling of image file to unfocused size
   }
-
-
+  
+  //TODO replace div with chatbox?
   let div = document.createElement("div");
   div.className = "info-planet";
   div.id = "info-" + name;
   div.style.left = (obj.x + divRelLeft) + "px";
   div.style.top = divRelTop + "px";
+  div.style.opacity = 0; //Max: so doesnt appear at start
   document.body.appendChild(div);
   obj.div = div;
 
@@ -156,7 +161,7 @@ function makeObject(name, src, x, zoom = 1, scale = 1, divRelTop, divRelLeft) {
   image.onload = function() {
     obj.width = image.width * scale;
     obj.height = image.height * scale;
-    obj.y = 0; //(HEIGHT- obj.height) / 2;
+    obj.y = 175; //Max: object lower gives more space for chat box
 
     // make all (almost) white pixels transparent
     const THRESHOLD = 230;
@@ -231,7 +236,6 @@ function drawPlanets(ctx, dx = 0) {
       obj.div.style.display = "block";
       let t = ts[i];
       
-      // quadratic with intercepts at 0 and 1 peak at 0.5,1
       // Max: added so is at full opacity for a range not a point- easier use
       if(t< 0.5) {
         obj.div.style.opacity = 1
