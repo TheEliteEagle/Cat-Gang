@@ -377,6 +377,9 @@ function addBotMessage(p, msg, planet) {
   console.log(p);
   p.textContent = msg;
 
+  // scroll to bottom
+  p.parentElement.parentElement.scrollTo(0, 9999);
+
   if (document.getElementById("tts_toggle").checked) {
     // console.log("speak")
     var tts = new SpeechSynthesisUtterance();
@@ -385,6 +388,8 @@ function addBotMessage(p, msg, planet) {
     // tts.voice = voice[1];
     window.speechSynthesis.speak(tts);
   }
+
+
 
 }
 
@@ -395,6 +400,9 @@ function createBotMessageP(planet){
   let p = document.createTextNode("typing...");
   div.appendChild(p);
   document.getElementById("messageBox_" + planet).appendChild(div);
+  
+  p.parentElement.parentElement.scrollTo(0, 9999);
+  
   return p;
 }
 
