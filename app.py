@@ -9,6 +9,10 @@ Session(app)
 
 @app.route("/")
 def index():
+    return render_template("homepage.html")
+
+@app.route("/solar")
+def solar():
     session.clear()
     return render_template("index.html")
 
