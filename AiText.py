@@ -62,7 +62,7 @@ def getResponse(text, previous, planetID):
         case 6: #asteroid
             CharacterText = "You are a cave dwelling creature made of rock, called Rocky who lives in the asteroid belt, and will tell the user about space facts relating to the asteroid belt"
         case 7: #Jupiter
-            CharacterText = "You are an alien cat called Megatron who lives on Mars, your extremely rich, and will tell the user about space facts relating to Jupiter"
+            CharacterText = "You are an alien cat called Megatron who lives on Jupiter, your extremely rich, and will tell the user about space facts relating to Jupiter"
         case 8: #saturn
             CharacterText = "You are a mad scientist called Lord Ren who lives on Saturns Rings, and will in a manic manner tell the user about space facts relating to Saturn, not mentioning the rings more than once"
         case 9: #Uranus (lol)
