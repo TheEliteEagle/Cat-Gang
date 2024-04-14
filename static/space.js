@@ -103,7 +103,6 @@ window.onload = function() {
     let dx = -event.wheelDeltaY * scrollSize;
 
     totalScroll -= dx; // rightward scroll is negative
-    //console.log(totalScroll);
 
     // clear the canvas to re-draw
     clear(ctx);
@@ -220,7 +219,6 @@ function makeObject(name, x, zoom = 1, scale = 1, alien_scale=1, alienRelX, alie
   obj.alien_img = new Image();
   obj.alien_img.src = alien_src;
   obj.alien_img.onload = function() {
-    console.log("loaded alient img");
     obj.alien_width = obj.alien_img.width * alien_scale;
     obj.alien_height = obj.alien_img.height * alien_scale;
 
@@ -285,7 +283,6 @@ function drawPlanets(ctx) {
   let [zooms, ts] = getCurrentZooms(ctx);
 
   for (let i = 0; i < planets.length; i += 1) {
-    // console.log(obj.img)
     let obj = planets[i];
     let zoom = zooms[i];
     let w = obj.width*zoom;
@@ -293,7 +290,6 @@ function drawPlanets(ctx) {
     let x = obj.x;
     let y = obj.y + ctx.canvas.height/2; 
     ctx.drawImage(obj.img, x-w/2, y-h/2, w, h); //obj.img.width, obj.img.height);
-    console.log(w, h, obj.alien_width, obj.alien_height, obj);
     ctx.drawImage(obj.alien_img, x+obj.alienX, y+obj.alienY, obj.alien_width, obj.alien_height); //obj.img.width, obj.img.height);
 
     // update divs
