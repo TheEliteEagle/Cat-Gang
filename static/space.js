@@ -8,10 +8,11 @@ var totalScroll = 0;
 var planets = [];
 
 const MAX_SCROLL = 7000;
+let scrollSize = 0.5;
 
 window.onload = function() {
 
-  let scrollSize = 0.5;
+  
 
   var parent = document.getElementById("canvas");
 
@@ -56,7 +57,7 @@ window.onload = function() {
     // what if there is no div?
 
     div.style.left = (obj.x + rels[i][0]) +"px";
-    div.style.top = rels[i][1];
+    div.style.top = (125 + rels[i][1]) + "px";
     obj.div = div;
 
     i+=1;
@@ -64,7 +65,7 @@ window.onload = function() {
 
   setTimeout(() => {
     drawPlanets(ctx);
-  }, 100);
+  }, 500);
 
 
   canvas.addEventListener("click", event => {
@@ -274,6 +275,13 @@ function drawPlanets(ctx, dx = 0) {
         obj.div.style.opacity = 1
       } else {
         obj.div.style.opacity = 2 - 2*t;
+      }
+
+      if(t<0.2) {
+        scrollSize = 0.06;
+      }
+      else {
+        scrollSize = 0.5;
       }
     }
 
