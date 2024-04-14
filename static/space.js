@@ -24,12 +24,19 @@ window.onload = function() {
 
 
   // make sure these are in order
-  makeObject("earth", "static/earth.jpg", 0, 1.2, 1, 0, 0);
-  makeObject("moon", "static/moon.jpg", 2000, 3, 0.5, 0, 0);
-  makeObject("mars", "static/moon.jpg", 4000, 1.5, 1, 0, 0);
-  makeObject("jupiter", "static/moon.jpg", 6000, 0.5, 3, 0, 0);
-
-  const rels = [[0,0], [0,0], [0,0], [0,0]];
+  makeObject("sun", "static/moon.jpg", -6000, 0.2, 5, 0, 0) //333,000
+  makeObject("mercury", "static/moon.jpg", -4000, 1.95, 0.05, 0, 0) //0.055
+  makeObject("venus", "static/moon.jpg", -2000, 1.2, 0.8, 0, 0) //0.8
+  makeObject("earth", "static/earth.jpg", 0, 1, 1, 0, 0); 
+  makeObject("moon", "static/moon.jpg", 2000, 1.75, 0.25, 0, 0); //0.25
+  makeObject("mars", "static/moon.jpg", 4000, 1.9, 0.1, 0, 0); //0.1
+  makeObject("jupiter", "static/moon.jpg", 6000, 0.5, 2, 0, 0); //11
+  makeObject("saturn", "static/moon.jpg", 8000, 0.25, 4, 0, 0); //95
+  makeObject("uranus", "static/moon.jpg", 10000, 0.1, 2.5, 0, 0); //14.5
+  makeObject("neptune", "static/moon.jpg", 12000, 0.15, 2.75, 0, 0); //17
+  makeObject("pluto", "static/moon.jpg", 14000, 1.8, 0.2, 0, 0); //0.2
+  
+  // const rels = [[0,0], [0,0], [0,0], [0,0]];
 
   let i=0;
   planets.forEach(obj=>{
@@ -42,7 +49,7 @@ window.onload = function() {
             <div class="messages" id="messageBox_${obj.name}">
 
             </div>
-
+            <br>
             <div class="user_input">
                 <form action="javascript:;" onsubmit="handleSubmit('${obj.name}')">
                     <input type="text" id="user_input_${obj.name}" placeholder = "Ask me anything..." autocomplete="off" name="user_input"><br>
@@ -56,8 +63,8 @@ window.onload = function() {
     // let div = document.getElementById("info-"+obj.name);
     // what if there is no div?
 
-    div.style.left = (obj.x + rels[i][0]) +"px";
-    div.style.top = (125 + rels[i][1]) + "px";
+    div.style.left = (obj.x + divRelLeft) +"px";
+    div.style.top = (125 + divRelTop) + "px";
     obj.div = div;
 
     i+=1;

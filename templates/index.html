@@ -27,10 +27,13 @@
       //console.log("RUN")
       let input = document.getElementById("user_input_" + planet).value
       addUserMessage(input, planet);
+      document.getElementById("user_input_" + planet).value = ""
 
       var payload = {
         user_input: input
       };
+
+
 
       var data = JSON.stringify(payload);
 

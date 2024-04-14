@@ -34,6 +34,8 @@
                 user_input: document.getElementById("user_input").value
             };
 
+            document.getElementById("user_input").value = ""
+
             var data = JSON.stringify( payload );
 
             fetch("/chatbot/mars",
