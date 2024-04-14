@@ -63,6 +63,31 @@
 
         })
     }
+
+    function firstInput(planet) {
+      var payload = {
+        user_input: "Hello! Tell me more about your planet."
+      };
+      var data = JSON.stringify(payload);
+
+      fetch("/chatbot/" + planet,
+        {
+          method: "POST",
+          body: data,
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        })
+        .then(function (res) {
+          return res.json()
+        })
+        .then(function (json) {
+          addBotMessage(json.response, planet);
+
+        })
+      
+    }
+
   </script>
 </head>
 
