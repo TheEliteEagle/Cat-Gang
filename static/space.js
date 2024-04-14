@@ -27,7 +27,6 @@ window.onload = function() {
   makeObject("mars", "static/moon.jpg", 4000, 1.5, 1, 0, 0);
   makeObject("jupiter", "static/moon.jpg", 6000, 0.5, 3, 0, 0);
 
-
   setTimeout(() => {
     drawPlanets(ctx);
   }, 500);
