@@ -7,7 +7,9 @@ var totalScroll = 0;
 
 var planets = [];
 
-const MAX_SCROLL = 7000;
+const MAX_SCROLL = 15000;
+const MIN_SCROLL = -6100;
+
 let scrollSize = 0.5;
 
 var loading = 11; // number of planets
@@ -79,11 +81,25 @@ window.onload = function() {
 
     totalScroll -= dx; // rightward scroll is negative
 
+    
+    if(totalScroll < MIN_SCROLL){
+      dx = 0;
+      totalScroll = MIN_SCROLL;
+    }
+    else if (totalScroll > MAX_SCROLL){
+      dx  = 0;
+      totalScroll = MAX_SCROLL
+    }
+    totalScroll = Math.max(MIN_SCROLL, totalScroll);
+    totalScroll = Math.min(MAX_SCROLL, totalScroll);
+
+    console.log(totalScroll)
+
     // clear the canvas to re-draw
     clear(ctx);
 
     ctx.translate(dx, 0);
-    drawPlanets(ctx, dx);
+    drawPlanets(ctx);
   });
 
 
@@ -263,14 +279,12 @@ function drawPlanets(ctx) {
   let [zooms, ts] = getCurrentZooms(ctx);
 
   for (let i = 0; i < planets.length; i += 1) {
-    console.log(planets[i]);
     let obj = planets[i];
     let zoom = zooms[i];
     let w = obj.width * zoom;
     let h = obj.height * zoom;
     let x = obj.x;
     let y = obj.y + ctx.canvas.height / 2;
-    console.log(x, y, w, h)
     ctx.globalAlpha = 1;
     ctx.drawImage(obj.img, x - w / 2, y - h / 2, w, h); //obj.img.width, obj.img.height);
 
