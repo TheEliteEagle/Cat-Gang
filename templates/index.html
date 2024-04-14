@@ -21,6 +21,16 @@
       let p = document.createTextNode(msg);
       div.appendChild(p);
       document.getElementById("messageBox_"+planet).appendChild(div);
+
+      if (document.getElementById("tts_toggle").checked){
+        // console.log("speak")
+        var tts = new SpeechSynthesisUtterance();
+        // var voices = window.speechSynthesis.getVoices();
+        tts.text = msg;
+        // tts.voice = voice[1];
+        window.speechSynthesis.speak(tts);
+      }
+
     }
 
     function handleSubmit(planet) {
@@ -59,6 +69,13 @@
 <body>
 
   <div id="canvas"></div>
+  <div id="settings">
+    <image src="/static/volume.png" height="34px" width="34px"></image>
+    <label class="switch">
+      <input type="checkbox" id="tts_toggle">
+      <span class="slider round"></span>
+    </label>
+  </div>
   <!-- <div id="info-earth" class="info-planet"> -->
   <!-- </div> -->
 
