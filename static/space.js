@@ -179,7 +179,7 @@ function makeObject(name, x, zoom = 1, scale = 1, alien_scale = 1, alienRelX, al
         `;
 
   document.body.appendChild(div);
-
+  firstInput(obj.name);
   obj.relLeft = divRelLeft; //(obj.x - div.offsetWidth/2 + divRelLeft) +"px";
 
   // let left = obj.x + ctx.getTransform().e;
