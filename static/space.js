@@ -334,7 +334,7 @@ function onClick(object, ctx) {
 
 function firstInput(planet) {
   var payload = {
-    user_input: "Hello! Tell me more about your planet."
+    user_input: "Hello! Introduce Yourself and tell me a brief fact."
   };
   var data = JSON.stringify(payload);
 
@@ -359,7 +359,7 @@ function firstInput(planet) {
       addBotMessage(createBotMessageP(planet), json.response, planet);
 
     }).catch(function(err) {
-      addBotMessage(createBotMessageP(planet), "Ask me about " + planet, planet);
+      addBotMessage(createBotMessageP(planet), "Hi! Ask me about the" + planet, planet);
     })
 
 }
